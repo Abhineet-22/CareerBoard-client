@@ -33,7 +33,7 @@ export default function Navbar() {
         </Link>
         {isRecruiter && (
           <Link to="/post-job"
-          // className='btnStyle'
+          className='btnStyle'
           >
         Post a Job
           </Link>
@@ -43,7 +43,7 @@ export default function Navbar() {
         )}
         {user && (
           <>
-            <span className='btnStyle'>
+            <span /*className='btnStyle'*/>
               {user.role}
             </span>
             <button type="button" onClick={logout} className="btnStyle">
