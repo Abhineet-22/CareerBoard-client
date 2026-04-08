@@ -57,8 +57,13 @@ function JobCard({ job, onApply }) {
 // ─── Presentational: filter sidebar ─────────────────────────────────────────
 function FilterSidebar({ filters, onChange, onClear }) {
   const categories  = ['Engineering', 'Design', 'Product', 'Data & Analytics', 'Marketing'];
-  const experiences = ['Entry Level', 'Mid Level', 'Senior', 'Lead / Manager'];
-  const types       = ['Full-time', 'Contract', 'Internship'];
+  const experiences = [
+    'Entry Level (0–2 yrs)',
+    'Mid Level (2–5 yrs)',
+    'Senior (5–8 yrs)',
+    'Lead / Manager (8+ yrs)',
+  ];
+  const types       = ['Full-time', 'Part-time', 'Contract', 'Internship', 'Freelance'];
 
   function toggle(field, value) {
     const current = filters[field] || [];
@@ -139,10 +144,10 @@ export default function JobListings() {
   const buildParams = useCallback(() => {
     const params = {};
     if (search)                       params.q          = search;
-    if (filters.category?.length)     params.category   = filters.category[0];
-    if (filters.experience?.length)   params.experience = filters.experience[0];
-    if (filters.type?.length)         params.type       = filters.type[0];
-    if (filters.arrangement?.length)  params.arrangement = filters.arrangement[0];
+    if (filters.category?.length)     params.category = filters.category.join(',');
+    if (filters.experience?.length)   params.experience = filters.experience.join(',');
+    if (filters.type?.length)         params.type = filters.type.join(',');
+    if (filters.arrangement?.length)  params.workArrangement = filters.arrangement.join(',');
     return params;
   }, [search, filters]);
 
