@@ -28,19 +28,10 @@ export default function Navbar() {
 
       {/* Nav links */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: -1 }}>
-        <Link to="/" /*style={navLinkStyle(pathname === '/')}*/ className='btnStyle'>
-          Browse Jobs
-        </Link>
-        {isRecruiter && (
-          <Link to="/post-job"
-          className='btnStyle'
-          >
-        Post a Job
-          </Link>
-        )}
-        {!user && (
-          <Link to="/auth" className='btnStyle'>Login</Link>
-        )}
+        {!user && <Link to="/auth" className='btnStyle'>Login</Link>}
+        {user && !isRecruiter && <Link to="/" className='btnStyle'>Browse Jobs</Link>}
+        {isRecruiter && <Link to="/recruiter/jobs" className='btnStyle'>My Jobs</Link>}
+        {isRecruiter && <Link to="/post-job" className='btnStyle'>Post a Job</Link>}
         {user && (
           <>
             <span /*className='btnStyle'*/>

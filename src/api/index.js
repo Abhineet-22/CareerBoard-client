@@ -12,6 +12,9 @@ api.interceptors.request.use((config) => {
 
 export const fetchJobs   = (params) => api.get('/jobs', { params });
 export const createJob   = (data)   => api.post('/jobs', data);
+export const fetchRecruiterJobs = () => api.get('/jobs/mine');
+export const updateRecruiterJob = (jobId, data) => api.put(`/jobs/${jobId}`, data);
+export const deleteRecruiterJob = (jobId) => api.delete(`/jobs/${jobId}`);
 export const applyToJob  = (data)   => api.post('/applications', data, {
   headers: { 'Content-Type': 'multipart/form-data' },
 });

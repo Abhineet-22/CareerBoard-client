@@ -24,17 +24,18 @@ export default function AuthPage() {
     setSubmitting(true);
     setError('');
     try {
+      let user;
       if (mode === 'login') {
-        await login({ email: form.email, password: form.password });
+        user = await login({ email: form.email, password: form.password });
       } else {
-        await register({
+        user = await register({
           name: form.name,
           email: form.email,
           password: form.password,
           role: form.role,
         });
       }
-      navigate('/');
+      navigate(user.role === 'Recruiter' ? '/recruiter/jobs' : '/');
     } catch (err) {
       const msg = err.response?.data?.error || err.response?.data?.errors?.[0]?.msg || 'Authentication failed.';
       setError(msg);

@@ -2,14 +2,29 @@ import { BrowserRouter, Navigate, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import JobListings from './pages/JobListings';
 import PostJob from './pages/PostJob';
-import ApplyJob from './pages/ApplyJob';
 import AuthPage from './pages/AuthPage';
+import RecruiterJobs from './pages/RecruiterJobs';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
-function RecruiterOnlyRoute({ children }) {
-  const { loading, isRecruiter } = useAuth();
+function CandidateOnlyRoute({ children }) {
+  const { loading, isAuthenticated, isRecruiter } = useAuth();
   if (loading) return null;
-  return isRecruiter ? children : <Navigate to="/auth" replace />;
+  if (!isAuthenticated) return <Navigate to="/auth" replace />;
+  return isRecruiter ? <Navigate to="/recruiter/jobs" replace /> : children;
+}
+
+function RecruiterOnlyRoute({ children }) {
+  const { loading, isAuthenticated, isRecruiter } = useAuth();
+  if (loading) return null;
+  if (!isAuthenticated) return <Navigate to="/auth" replace />;
+  return isRecruiter ? children : <Navigate to="/" replace />;
+}
+
+function AuthOnlyRoute({ children }) {
+  const { loading, isAuthenticated, isRecruiter } = useAuth();
+  if (loading) return null;
+  if (!isAuthenticated) return children;
+  return <Navigate to={isRecruiter ? '/recruiter/jobs' : '/'} replace />;
 }
 
 export default function App() {
@@ -18,8 +33,22 @@ export default function App() {
       <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route path="/"           element={<JobListings />} />
-          <Route path="/auth"       element={<AuthPage />} />
+          <Route
+            path="/"
+            element={(
+              <CandidateOnlyRoute>
+                <JobListings />
+              </CandidateOnlyRoute>
+            )}
+          />
+          <Route
+            path="/auth"
+            element={(
+              <AuthOnlyRoute>
+                <AuthPage />
+              </AuthOnlyRoute>
+            )}
+          />
           <Route
             path="/post-job"
             element={(
@@ -28,7 +57,14 @@ export default function App() {
               </RecruiterOnlyRoute>
             )}
           />
-          <Route path="/apply/:id"  element={<ApplyJob />} />
+          <Route
+            path="/recruiter/jobs"
+            element={(
+              <RecruiterOnlyRoute>
+                <RecruiterJobs />
+              </RecruiterOnlyRoute>
+            )}
+          />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

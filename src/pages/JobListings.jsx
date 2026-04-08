@@ -1,10 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { fetchJobs } from '../api';
 import '../App.css';
 
 // ─── Presentational: single job card ────────────────────────────────────────
-function JobCard({ job, onApply }) {
+function JobCard({ job }) {
   return (
     <div className={`job-card ${job.featured ? 'featured' : ''}`}>
       <div className="job-top">
@@ -45,9 +44,6 @@ function JobCard({ job, onApply }) {
               day: 'numeric', month: 'short',
             })}
           </span>
-          <button className="btn btn-primary" onClick={() => onApply(job._id)}>
-            Apply
-          </button>
         </div>
       </div>
     </div>
@@ -132,8 +128,6 @@ function SkeletonCard() {
 
 // ─── Container: JobListings page ─────────────────────────────────────────────
 export default function JobListings() {
-  const navigate = useNavigate();
-
   const [jobs,    setJobs]    = useState([]);
   const [loading, setLoading] = useState(true);
   const [error,   setError]   = useState(null);
@@ -245,7 +239,6 @@ export default function JobListings() {
                 <JobCard
                   key={job._id}
                   job={job}
-                  onApply={id => navigate(`/apply/${id}`)}
                 />
               ))}
             </div>
