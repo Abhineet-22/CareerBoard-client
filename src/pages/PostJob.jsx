@@ -238,7 +238,7 @@ export default function PostJob() {
           <div className="section-label">Company information</div>
 
           <Field label="Company name" required error={errors.companyName}>
-            <input type="text" placeholder="e.g. Razorpay" {...I('companyName')} />
+            <input type="text" placeholder="e.g. Razorpay" maxLength={80} {...I('companyName')} />
           </Field>
 
           <div className="field-row">
@@ -279,7 +279,7 @@ export default function PostJob() {
           <div className="section-label">Role details</div>
 
           <Field label="Job title" required error={errors.jobTitle}>
-            <input type="text" placeholder="e.g. Senior Frontend Engineer" {...I('jobTitle')} />
+            <input type="text" placeholder="e.g. Senior Frontend Engineer" maxLength={120} {...I('jobTitle')} />
           </Field>
 
           <div className="field-row">
@@ -303,6 +303,7 @@ export default function PostJob() {
             <textarea
               rows={5}
               placeholder="Describe the role, responsibilities, and what success looks like…"
+              maxLength={1200}
               {...I('description')}
             />
             <div className="char-count">{data.description.length} / 1200</div>
@@ -346,7 +347,7 @@ export default function PostJob() {
 
           <Field label="Location" required error={errors.location}
             hint="For remote roles you can write 'Remote-India' or 'Anywhere'.">
-            <input type="text" placeholder="e.g. Bangalore" {...I('location')} />
+            <input type="text" placeholder="e.g. Bangalore" maxLength={120} {...I('location')} />
           </Field>
 
           <Field label="Salary range" optional error={errors.salary}>
@@ -361,7 +362,7 @@ export default function PostJob() {
           </Field>
 
           <Field label="Additional notes" optional>
-            <textarea rows={3} placeholder="Perks, benefits, visa sponsorship…" {...I('notes')} />
+            <textarea rows={3} placeholder="Perks, benefits, visa sponsorship…" maxLength={500} {...I('notes')} />
           </Field>
 
           {submitError && (

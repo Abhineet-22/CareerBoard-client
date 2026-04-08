@@ -321,6 +321,7 @@
   border-radius: 20px;
   background: var(--bg);
   box-shadow: var(--shadow);
+  overflow: hidden;
 }
 
 .job-card.featured {
@@ -366,6 +367,16 @@
   font-size: 18px;
   font-weight: 700;
   color: var(--text-h);
+}
+
+.job-title,
+.job-company,
+.job-desc,
+.job-location,
+.job-salary,
+.tag {
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .job-company,
