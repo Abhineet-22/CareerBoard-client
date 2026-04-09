@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { deleteRecruiterJob, fetchRecruiterJobs, updateRecruiterJob } from '../api';
+import { deleteRecruiterJob, fetchJobs, fetchRecruiterJobs, updateRecruiterJob } from '../api';
+import { useAuth } from '../context/AuthContext';
 import '../App.css';
 
 const EDITABLE_FIELDS = [
@@ -47,6 +48,7 @@ function RecruiterJobCard({ job, onEdit, onDelete }) {
 }
 
 export default function RecruiterJobs() {
+  const { user, loading: authLoading } = useAuth();
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -55,22 +57,55 @@ export default function RecruiterJobs() {
   const [saving, setSaving] = useState(false);
 
   async function loadMine() {
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     setError('');
     try {
       const { data } = await fetchRecruiterJobs();
       setJobs(data);
     } catch (err) {
-      const msg = err.response?.data?.error || 'Could not load your posted jobs.';
-      setError(msg);
+      if (err.response?.status !== 404) {
+        const msg = err.response?.data?.error || 'Could not load your posted jobs.';
+        setError(msg);
+        return;
+      }
+
+      try {
+        const { data: allJobs } = await fetchJobs();
+        const recruiterEmail = user.email?.toLowerCase();
+        const recruiterId = String(user.id || '');
+
+        const mine = allJobs.filter((job) => {
+          if (job.recruiterId) {
+            return String(job.recruiterId) === recruiterId;
+          }
+
+          if (job.contactEmail && recruiterEmail) {
+            return String(job.contactEmail).toLowerCase() === recruiterEmail;
+          }
+
+          return false;
+        });
+
+        setJobs(mine);
+      } catch (fallbackErr) {
+        const msg = fallbackErr.response?.data?.error || 'Could not load your posted jobs.';
+        setError(msg);
+      }
     } finally {
       setLoading(false);
     }
   }
 
   useEffect(() => {
-    loadMine();
-  }, []);
+    if (!authLoading) {
+      loadMine();
+    }
+  }, [authLoading, user]);
 
   function beginEdit(job) {
     setEditingJobId(job._id);
