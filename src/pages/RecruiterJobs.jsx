@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { deleteRecruiterJob, fetchJobs, fetchRecruiterJobs, updateRecruiterJob } from '../api';
 import { useAuth } from '../context/AuthContext';
@@ -56,7 +56,7 @@ export default function RecruiterJobs() {
   const [draft, setDraft] = useState(null);
   const [saving, setSaving] = useState(false);
 
-  async function loadMine() {
+  const loadMine = useCallback(async () => {
     if (!user) {
       setLoading(false);
       return;
@@ -99,13 +99,13 @@ export default function RecruiterJobs() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [user]);
 
   useEffect(() => {
     if (!authLoading) {
       loadMine();
     }
-  }, [authLoading, user]);
+  }, [authLoading, loadMine]);
 
   function beginEdit(job) {
     setEditingJobId(job._id);
