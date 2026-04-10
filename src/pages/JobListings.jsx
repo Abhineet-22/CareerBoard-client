@@ -1,54 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { fetchJobs } from '../api';
+import JobCard from '../components/JobCard';
 import '../App.css';
-
-// ─── Presentational: single job card ────────────────────────────────────────
-function JobCard({ job }) {
-  return (
-    <div className={`job-card ${job.featured ? 'featured' : ''}`}>
-      <div className="job-top">
-        <div className="company-row">
-          <div className="company-logo">
-            {job.companyName.slice(0, 2).toUpperCase()}
-          </div>
-          <div>
-            <div className="job-title">{job.jobTitle}</div>
-            <div className="job-company">{job.companyName}</div>
-          </div>
-        </div>
-      </div>
-
-      <p className="job-desc">{job.description}</p>
-
-      <div className="job-tags">
-        <span className="tag tag-exp">{job.experienceLevel}</span>
-        <span className="tag tag-type">{job.jobType}</span>
-        {job.workArrangement === 'Remote' && (
-          <span className="tag tag-remote">Remote</span>
-        )}
-        {job.skills.slice(0, 3).map(s => (
-          <span key={s} className="tag">{s}</span>
-        ))}
-      </div>
-
-      <div className="job-footer">
-        <span className="job-location">{job.location}</span>
-        <div className="job-footer-right">
-          {job.salaryMin && job.salaryMax && (
-            <span className="job-salary">
-              ₹{job.salaryMin} to ₹{job.salaryMax} LPA
-            </span>
-          )}
-          <span className="job-posted">
-            {new Date(job.createdAt).toLocaleDateString('en-IN', {
-              day: 'numeric', month: 'short',
-            })}
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 // ─── Presentational: filter sidebar ─────────────────────────────────────────
 function FilterSidebar({ filters, onChange, onClear }) {
@@ -150,8 +103,14 @@ export default function JobListings() {
     setError(null);
     try {
       const { data } = await fetchJobs(buildParams());
-      setJobs(data);
+      if (Array.isArray(data)) {
+        setJobs(data);
+      } else {
+        setJobs([]);
+        setError('Unexpected jobs response from server. Please check API base URL configuration.');
+      }
     } catch {
+      setJobs([]);
       setError('Could not load jobs. Please check your connection and try again.');
     } finally {
       setLoading(false);

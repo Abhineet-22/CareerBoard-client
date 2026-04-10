@@ -3,6 +3,7 @@ import Navbar from './components/Navbar';
 import JobListings from './pages/JobListings';
 import PostJob from './pages/PostJob';
 import AuthPage from './pages/AuthPage';
+import ApplyJob from './pages/ApplyJob';
 import RecruiterJobs from './pages/RecruiterJobs';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
@@ -38,6 +39,14 @@ export default function App() {
             element={(
               <CandidateOnlyRoute>
                 <JobListings />
+              </CandidateOnlyRoute>
+            )}
+          />
+          <Route
+            path="/apply/:id"
+            element={(
+              <CandidateOnlyRoute>
+                <ApplyJob />
               </CandidateOnlyRoute>
             )}
           />

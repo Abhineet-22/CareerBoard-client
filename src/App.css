@@ -421,6 +421,21 @@
   color: var(--text-h);
 }
 
+.tag-exp {
+  background: #e6f1fb;
+  color: #0c447c;
+}
+
+.tag-type {
+  background: #eaf3de;
+  color: #27500a;
+}
+
+.tag-remote {
+  background: #faeeda;
+  color: #633806;
+}
+
 .error-banner,
 .empty {
   padding: 18px 20px;

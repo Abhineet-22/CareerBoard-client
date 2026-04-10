@@ -66,7 +66,12 @@ export default function RecruiterJobs() {
     setError('');
     try {
       const { data } = await fetchRecruiterJobs();
-      setJobs(data);
+      if (Array.isArray(data)) {
+        setJobs(data);
+      } else {
+        setJobs([]);
+        setError('Unexpected jobs response from server.');
+      }
     } catch (err) {
       if (err.response?.status !== 404) {
         const msg = err.response?.data?.error || 'Could not load your posted jobs.';
@@ -76,6 +81,12 @@ export default function RecruiterJobs() {
 
       try {
         const { data: allJobs } = await fetchJobs();
+        if (!Array.isArray(allJobs)) {
+          setJobs([]);
+          setError('Unexpected jobs response from server.');
+          return;
+        }
+
         const recruiterEmail = user.email?.toLowerCase();
         const recruiterId = String(user.id || '');
 
