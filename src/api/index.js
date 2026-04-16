@@ -22,3 +22,8 @@ export const applyToJob  = (data)   => api.post('/applications', data, {
 export const registerUser = (data) => api.post('/auth/register', data);
 export const loginUser = (data) => api.post('/auth/login', data);
 export const fetchMe = () => api.get('/auth/me');
+
+export const adminFetchUsers = (role) => api.get('/admin/users', { params: { role } });
+export const adminCreateUser = (role, data) => api.post(`/admin/users/${role}`, data);
+export const adminUpdateUser = (role, id, data) => api.put(`/admin/users/${role}/${id}`, data);
+export const adminDeleteUser = (role, id) => api.delete(`/admin/users/${role}/${id}`);

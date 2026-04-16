@@ -4,7 +4,7 @@ import '../App.css';
 
 export default function Navbar() {
   // const { pathname } = useLocation();
-  const { user, isRecruiter, logout } = useAuth();
+  const { user, isRecruiter, isAdmin, logout } = useAuth();
 
   return (
     <nav style={{
@@ -29,7 +29,8 @@ export default function Navbar() {
       {/* Nav links */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: -1 }}>
         {!user && <Link to="/auth" className='btnStyle'>Login</Link>}
-        {user && !isRecruiter && <Link to="/" className='btnStyle'>Browse Jobs</Link>}
+        {user && isAdmin && <Link to="/admin" className='btnStyle'>Admin Panel</Link>}
+        {user && !isRecruiter && !isAdmin && <Link to="/" className='btnStyle'>Browse Jobs</Link>}
         {isRecruiter && <Link to="/recruiter/jobs" className='btnStyle'>My Jobs</Link>}
         {isRecruiter && <Link to="/post-job" className='btnStyle'>Post a Job</Link>}
         {user && (

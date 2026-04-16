@@ -35,7 +35,7 @@ export default function AuthPage() {
           role: form.role,
         });
       }
-      navigate(user.role === 'Recruiter' ? '/recruiter/jobs' : '/');
+      navigate(user.role === 'Recruiter' ? '/recruiter/jobs' : user.role === 'Admin' ? '/admin' : '/');
     } catch (err) {
       const msg = err.response?.data?.error || err.response?.data?.errors?.[0]?.msg || 'Authentication failed.';
       setError(msg);
